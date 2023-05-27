@@ -62,32 +62,75 @@ chrN <- posInfo[1]
 start <- as.numeric(posInfo[2])
 end <- as.numeric(posInfo[3])
 # reference
-refTrack <- GeneRegionTrack(refGff, name = "MANE", fill = "#8282d2", stackHeight = 0.1,
-                             transcriptAnnotation = "transcript",
-)
-relations <- read.table(refGff, comment.char = "#", header = F, sep = "\t") %>%
-  dplyr::filter(V3=="gene") %>%
+refTrack <-
+  GeneRegionTrack(
+    refGff,
+    name = "MANE",
+    fill = "#8282d2",
+    stackHeight = 0.1,
+    transcriptAnnotation = "transcript",
+  )
+relations <-
+  read.table(refGff,
+             comment.char = "#",
+             header = F,
+             sep = "\t") %>%
+  dplyr::filter(V3 == "gene") %>%
   separate_wider_delim(V9, ";", names = c("transcript", "gene_name")) %>%
-  mutate(transcript = str_replace(transcript, "ID=","")) %>%
-  mutate(gene_name = str_replace(gene_name, "gene_name=",""))
-transcript(refTrack) <- tibble(transcript = transcript(refTrack)) %>% left_join(relations, by="transcript") %>%
-  mutate(trans=if_else(startsWith(transcript,"ENSG"), gene_name, transcript)) %>% .$trans
+  mutate(transcript = str_replace(transcript, "ID=", "")) %>%
+  mutate(gene_name = str_replace(gene_name, "gene_name=", ""))
+transcript(refTrack) <-
+  tibble(transcript = transcript(refTrack)) %>% 
+  left_join(relations, by = "transcript") %>%
+  mutate(trans = if_else(startsWith(transcript, "ENSG"), gene_name, transcript)) %>% .$trans
 
 # transcripts
-transTrack <- GeneRegionTrack(outGff, name = "Transcripts", color = "#960000", fill = "#960000",
-                           geneSymbols = TRUE, transcriptAnnotation = "transcript", stackHeight = 0.2
-)
+transTrack <-
+  GeneRegionTrack(
+    outGff,
+    name = "Transcripts",
+    color = "#960000",
+    fill = "#960000",
+    geneSymbols = TRUE,
+    transcriptAnnotation = "transcript",
+    stackHeight = 0.2
+  )
 
 # reads
-readTrack <- AlignmentsTrack(outBam, isPaired = FALSE, name = "Reads", stacking = "full",
-                             type = c("coverage", "sashimi", "pileup"),
-                             coverageHeight = 0.08, sashimiHeight = 0.08,
-                             min.height = 0, minCoverageHeight = 0, minSashimiHeight = 0)
-
-#plotTracks(c(idxTrack, axisTrack, refTrack, transTrack, readTrack), type = c("coverage", "sashimi", "pileup"),
-plotTracks(c(refTrack, transTrack, readTrack),
-           chromosome = chrN, from = start, to = end,
-           sizes = c(1,4,10), title.width = 0.5, margin = 1,
-           background.panel = "#FFFEDB",
-           background.title = "darkblue"
+readTrack <- AlignmentsTrack(
+  outBam,
+  isPaired = FALSE,
+  chromosome = chrN,
+  from = start,
+  to = end,
+  name = "Reads",
+  stacking = "full",
+  type = c("coverage", "sashimi", "pileup"),
+  coverageHeight = 0.08,
+  sashimiHeight = 0.08,
+  min.height = 0,
+  minCoverageHeight = 0,
+  minSashimiHeight = 0
 )
+plotTracks(readTrack,
+           chromosome = chrN,
+           from = start,
+           to = end)
+
+# plot igv
+outPdf <- glue("{outdir}/{prefix}.igv.pdf")
+pdf(outPdf)
+#plotTracks(c(idxTrack, axisTrack, refTrack, transTrack, readTrack), type = c("coverage", "sashimi", "pileup"),
+plotTracks(
+  c(refTrack, transTrack, readTrack),
+  chromosome = chrN,
+  from = start,
+  to = end,
+  sizes = c(1, 4, 10),
+  title.width = 0.5,
+  margin = 1,
+  background.panel = "#FFFEDB",
+  background.title = "darkblue"
+)
+dev.off()
+
