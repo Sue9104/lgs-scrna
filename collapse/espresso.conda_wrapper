@@ -1,0 +1,22 @@
+#!/bin/bash
+# conda_wrapper activates the conda environment and then
+# executes its arguments in that environment.
+
+
+function main() {
+  local SCRIPT_DIR="$(dirname `realpath $0`)" || return 1
+  source "${SCRIPT_DIR}/.env" || return 1
+
+  echo conda activate "${CONDA_ENV_PREFIX}"
+  source "${HOME}/.bashrc" || return 1
+  conda activate "${CONDA_ENV_PREFIX}" || return 1
+
+  echo "snakemake -s ${SCRIPT_DIR}/espresso.Snakefile --configfile $@ --cores ${CORES}"
+  snakemake -s ${SCRIPT_DIR}/espresso.Snakefile --configfile $@ --cores ${CORES}
+  local RETURN_VALUE="$?"
+
+  conda deactivate || return 1
+  return "${RETURN_VALUE}"
+}
+
+main "$@"
