@@ -1,0 +1,10 @@
+genome: '/public/home/msu/genomes/hg38/ensembl/Homo_sapiens.GRCh38.dna_sm.primary_assembly.chr.fa'
+gtf: '/public/home/msu/genomes/hg38/gencode/gencode.v42.primary_assembly.annotation.gtf'
+cage: '/public/home/msu/pipelines/exon-usages-in-3rd-seq/SQANTI3/data/ref_TSS_annotation/human.refTSS_v3.1.hg38.bed'
+polya: '/public/home/msu/pipelines/exon-usages-in-3rd-seq/SQANTI3/data/polyA_motifs/mouse_and_human.polyA_motif.txt'
+primers: '/public/home/msu/projects/seq3/examples/primers.fasta'
+barcodes: '/public/home/msu/projects/seq3/examples/3M-february-2018-REVERSE-COMPLEMENTED.txt.gz'
+
+infile: '/public/home/msu/tests/isoseq3/test.csv'
+outdir: '/public/home/msu/tests/isoseq3/isoseq3-test-20230530'
+project: 'test'

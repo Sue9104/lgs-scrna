@@ -13,8 +13,8 @@ function main() {
 
   if [ $# == 1 ]
   then
-    echo "snakemake -s ${SCRIPT_DIR}/espresso.Snakefile --configfile $@ --cores ${CORES}"
-    snakemake -s ${SCRIPT_DIR}/espresso.Snakefile --configfile $@ --cores ${CORES}
+    echo "${snakemake} -s ${SCRIPT_DIR}/isoseq3.Snakefile --configfile $@ --cores ${CORES}"
+    ${snakemake} -s ${SCRIPT_DIR}/isoseq3.Snakefile --configfile $@ --cores ${CORES}
   else
     echo $@
     "$@"
