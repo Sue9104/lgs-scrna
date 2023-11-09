@@ -10,7 +10,7 @@ gtf=$7
 #gtf=/public/home/msu/genomes/hg38/gencode/gencode.v42.primary_assembly.annotation.gtf
 cage=/public/home/msu/pipelines/exon-usages-in-3rd-seq/SQANTI3/data/ref_TSS_annotation/human.refTSS_v3.1.hg38.bed
 
-cores=40
+cores=20
 # create outdir if not exists
 [ ! -d "${outdir}" ] && mkdir ${outdir}
 
